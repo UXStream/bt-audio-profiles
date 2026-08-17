@@ -154,11 +154,11 @@
         </inbodydescription>
         <location file="/builds/repo/bluetooth_apps/PROFILES_LE/temp_include_dir/csis_psri_key.h" line="21" column="6" declfile="/builds/repo/bluetooth_apps/PROFILES_LE/temp_include_dir/csis_psri_key.h" declline="21" declcolumn="6"/>
       </memberdef>
-      <memberdef kind="function" id="csis__psri__key_8h_1a12f8bfd2d54358611f58a887b28326f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="csis__psri__key_8h_1a892fa2b3163797f112af550dbebff0f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void ga_csis_sirk_encyption_func</definition>
+        <definition>void ga_csis_sirk_encryption_func</definition>
         <argsstring>(SIRK *sirk_plain_text, wiced_bt_device_link_keys_t *link_keys, SIRK *sirk_encr)</argsstring>
-        <name>ga_csis_sirk_encyption_func</name>
+        <name>ga_csis_sirk_encryption_func</name>
         <param>
           <type><ref refid="group__wiced__bt__ga__csis__common_1ga3f2e86d97c8c71b494e3e7a8b3f80819" kindref="member">SIRK</ref> *</type>
           <declname>sirk_plain_text</declname>
@@ -232,7 +232,7 @@
 <codeline lineno="20"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ga_csis_generate_prand(uint8_t*<sp/>p_prand);</highlight></codeline>
 <codeline lineno="21"><highlight class="normal"><ref refid="group__wiced__bt__ga__csis__common_1gaa2a837b724013e29df8ef1aea5448081" kindref="member">PSRI</ref>*<sp/>ga_csis_generate_psri(<ref refid="group__wiced__bt__ga__csis__common_1ga3f2e86d97c8c71b494e3e7a8b3f80819" kindref="member">SIRK</ref>*<sp/>sirk);</highlight></codeline>
 <codeline lineno="22"><highlight class="normal"></highlight></codeline>
-<codeline lineno="23"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ga_csis_sirk_encyption_func(<ref refid="group__wiced__bt__ga__csis__common_1ga3f2e86d97c8c71b494e3e7a8b3f80819" kindref="member">SIRK</ref>*<sp/>sirk_plain_text,<sp/>wiced_bt_device_link_keys_t*<sp/>link_keys,<sp/><ref refid="group__wiced__bt__ga__csis__common_1ga3f2e86d97c8c71b494e3e7a8b3f80819" kindref="member">SIRK</ref>*<sp/>sirk_encr);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ga_csis_sirk_encryption_func(<ref refid="group__wiced__bt__ga__csis__common_1ga3f2e86d97c8c71b494e3e7a8b3f80819" kindref="member">SIRK</ref>*<sp/>sirk_plain_text,<sp/>wiced_bt_device_link_keys_t*<sp/>link_keys,<sp/><ref refid="group__wiced__bt__ga__csis__common_1ga3f2e86d97c8c71b494e3e7a8b3f80819" kindref="member">SIRK</ref>*<sp/>sirk_encr);</highlight></codeline>
 <codeline lineno="24"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ga_csis_sirk_decryption_func(<ref refid="group__wiced__bt__ga__csis__common_1ga3f2e86d97c8c71b494e3e7a8b3f80819" kindref="member">SIRK</ref>*<sp/>sirk_enc,<sp/>wiced_bt_device_link_keys_t*<sp/>link_keys,<sp/><ref refid="group__wiced__bt__ga__csis__common_1ga3f2e86d97c8c71b494e3e7a8b3f80819" kindref="member">SIRK</ref>*<sp/>sirk_plain_text);</highlight></codeline>
 <codeline lineno="25"><highlight class="normal"></highlight></codeline>
 <codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>CSIS_PSRI_KEY_H</highlight><highlight class="normal"></highlight></codeline>

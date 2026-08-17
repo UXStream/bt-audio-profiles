@@ -338,6 +338,7 @@ static void hfp_ag_rfcomm_opened ( wiced_bt_hfp_ag_session_cb_t *p_scb )
     p_scb->res_len              = 0;
     p_scb->sco_idx              = BTM_INVALID_SCO_INDEX;
     p_scb->b_sco_opened         = WICED_FALSE;
+    p_scb->reconnect_pending    = WICED_FALSE;
     p_scb->indicator_bit_map    = 0x7F;
     p_scb->codec_conn_state     = CODEC_CONN_STATE_NOT_STARTED;
 #if ((BTM_WBS_INCLUDED == TRUE) || (BTM_SWBS_INCLUDED == TRUE))

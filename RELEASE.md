@@ -2,6 +2,10 @@
 
 ## Changelog
 =============
+## v2.0.4
+- codec_conn_state in wiced_bt_hfp_ag.h changed from wiced_bool_t to unint_8. This has no impact on functionality.
+- Fixed a crash in A2DP which was observed with LLVM toolchain.
+
 ## v2.0.3
 - Bug fixes.
 

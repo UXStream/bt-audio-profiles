@@ -540,7 +540,7 @@
     <member refid="csis__psri__key_8h_1a7bbecee4de0a6ede52753d036d7735f1" kind="function"><name>ga_csis_calc_hash</name></member>
     <member refid="csis__psri__key_8h_1a6278d31a93ce3079080e94d6a74b05c0" kind="function"><name>ga_csis_generate_prand</name></member>
     <member refid="csis__psri__key_8h_1aa54a45bf154d2d5540e047337532181b" kind="function"><name>ga_csis_generate_psri</name></member>
-    <member refid="csis__psri__key_8h_1a12f8bfd2d54358611f58a887b28326f8" kind="function"><name>ga_csis_sirk_encyption_func</name></member>
+    <member refid="csis__psri__key_8h_1a892fa2b3163797f112af550dbebff0f6" kind="function"><name>ga_csis_sirk_encryption_func</name></member>
     <member refid="csis__psri__key_8h_1a99fedbe452156ac887d7c77f9f612035" kind="function"><name>ga_csis_sirk_decryption_func</name></member>
   </compound>
   <compound refid="le__audio__bap__broadcast_8h" kind="file"><name>le_audio_bap_broadcast.h</name>

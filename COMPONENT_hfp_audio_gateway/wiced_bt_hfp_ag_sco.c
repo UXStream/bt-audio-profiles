@@ -130,7 +130,15 @@ void hfp_ag_sco_create(wiced_bt_hfp_ag_session_cb_t *p_scb, wiced_bool_t is_orig
 
     /* remove listening SCO */
     if ( p_scb->sco_idx != BTM_INVALID_SCO_INDEX )
-        wiced_bt_sco_remove( p_scb->sco_idx );
+    {
+        wiced_bt_dev_status_t res = wiced_bt_sco_remove( p_scb->sco_idx );
+        // If sco is already open, wait for the disconnection before initiating the SCO connection
+        if ( (res == WICED_BT_PENDING) && (p_scb->b_sco_opened) )
+        {
+            p_scb->reconnect_pending = WICED_TRUE;
+            return;
+        }
+    }
 
     /* Attempt to use eSCO if remote host supports HFP >= 1.5 */
     if ( is_orig )
@@ -163,7 +171,7 @@ void hfp_ag_sco_create(wiced_bt_hfp_ag_session_cb_t *p_scb, wiced_bool_t is_orig
         status = wiced_bt_sco_create_as_acceptor_ex(p_scb->hf_addr, (uint16_t *) &p_scb->sco_idx);
     }
 
-
+    p_scb->reconnect_pending = WICED_FALSE;
     WICED_BT_TRACE( "hfp_ag_sco_create  is_orig: %u   sco_idx: 0x%0x  status:0x%x retry_with_sco_only: %u\n",
                     is_orig, p_scb->sco_idx, status, p_scb->retry_with_sco_only );
 }
@@ -236,7 +244,7 @@ void wiced_bt_hfp_ag_sco_management_callback( wiced_bt_management_evt_t event, w
                     return;
                 }
 
-                if ( p_scb->retry_with_sco_only )
+                if ( p_scb->retry_with_sco_only || p_scb->reconnect_pending )
                     hfp_ag_sco_create( p_scb, WICED_TRUE );
                 else
                 {
@@ -290,7 +298,8 @@ void hfp_cn_timeout(WICED_TIMER_PARAM_TYPE scb)
 
     /* Codec negotiation failed - retry with plain old SCO */
     p_scb->local_selected_codec = WICED_BT_HFP_AG_CODEC_CVSD;
-    p_scb->peer_supported_codecs = WICED_BT_HFP_AG_CODEC_CVSD;
+    // Do not reset peer_supported_codecs and use local_selected_codec as on receiving BCS, we only set local_selected_codec and peer_supported_codecs is not set again
+    //p_scb->peer_supported_codecs = WICED_BT_HFP_AG_CODEC_CVSD;
 
     /*  We do not want to go for codec neg again and would rather just send conn req with CVSD */
     p_scb->codec_conn_state = CODEC_CONN_STATE_NOT_STARTED;

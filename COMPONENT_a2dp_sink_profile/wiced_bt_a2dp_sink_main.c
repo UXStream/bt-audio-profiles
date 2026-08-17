@@ -292,7 +292,9 @@ static wiced_bt_a2dp_sink_ccb_t *wiced_bt_a2dp_sink_get_ccb(uint16_t event,
     switch (event)
     {
     case WICED_BT_A2DP_SINK_API_CONNECT_EVT:
-        p_ccb = wiced_bt_a2dp_sink_alloc_ccb(p_data);
+        p_ccb = wiced_bt_a2dp_sink_get_ccb_by_bd_addr(p_data->api_data.bd_address);
+        if (p_ccb == NULL)
+            p_ccb = wiced_bt_a2dp_sink_alloc_ccb(p_data);
         break;
     case WICED_BT_A2DP_SINK_API_DISCONNECT_EVT:
         p_ccb = wiced_bt_a2dp_sink_get_ccb_by_handle(p_data->api_data.handle);

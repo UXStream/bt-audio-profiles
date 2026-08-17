@@ -92,6 +92,19 @@ wiced_bool_t wiced_bt_a2dp_source_next_gatcap(wiced_bt_a2dp_source_ccb_t *p_ccb,
 /*Get Codec type from peer codec info. Used when we want to quickly get type without complete parsing*/
 #define GET_CODEC_TYPE_FROM_CODEC_INFO(ARR) (ARR[2])
 
+// byte by byte copy to avoid using memcpy from libc which uses floating point instructions
+// This doesn't verify validity of pointers.
+// It is the responsibility of the caller to ensure that the pointers are valid and point to valid memory locations.
+static void wiced_bt_a2dp_source_utils_memcpy(void *dest, const void *src, size_t n)
+{
+    uint8_t *d = (uint8_t *)dest;
+    const uint8_t *s = (const uint8_t *)src;
+    while (n--)
+    {
+        *d++ = *s++;
+    }
+}
+
 /*******************************************************************************
 ** Function         wiced_bt_a2dp_source_proc_stream_evt
 ** Description      Utility function to compose stream events.
@@ -136,41 +149,41 @@ static void wiced_bt_a2dp_source_proc_stream_evt(uint8_t handle,
         {
             WICED_BTA2DP_SRC_TRACE ("[%s] error code %d \n",__FUNCTION__,p_data->hdr.err_code);
 
-            memcpy(&p_msg->msg, p_data, sizeof (wiced_bt_avdt_ctrl_t));
+            wiced_bt_a2dp_source_utils_memcpy(&p_msg->msg, p_data, sizeof (wiced_bt_avdt_ctrl_t));
 
             switch (event)
             {
                 case AVDT_CONFIG_IND_EVT:
-                memcpy(&p_msg->cfg, p_data->config_ind.p_cfg, sizeof(wiced_bt_avdt_cfg_t));
+                wiced_bt_a2dp_source_utils_memcpy(&p_msg->cfg, p_data->config_ind.p_cfg, sizeof(wiced_bt_avdt_cfg_t));
                 break;
 
                 case AVDT_RECONFIG_CFM_EVT:
-                memcpy(&p_msg->cfg, p_data->reconfig_cfm.p_cfg, sizeof(wiced_bt_avdt_cfg_t));
+                wiced_bt_a2dp_source_utils_memcpy(&p_msg->cfg, p_data->reconfig_cfm.p_cfg, sizeof(wiced_bt_avdt_cfg_t));
                 break;
 
                 case AVDT_RECONFIG_IND_EVT:
-                memcpy(&p_msg->cfg, p_data->reconfig_ind.p_cfg, sizeof(wiced_bt_avdt_cfg_t));
+                wiced_bt_a2dp_source_utils_memcpy(&p_msg->cfg, p_data->reconfig_ind.p_cfg, sizeof(wiced_bt_avdt_cfg_t));
                 break;
 
                 case AVDT_DISCOVER_CFM_EVT:
-                memcpy(&p_msg->msg.discover_cfm, &p_data->discover_cfm, sizeof(wiced_bt_avdt_discover_t));
+                wiced_bt_a2dp_source_utils_memcpy(&p_msg->msg.discover_cfm, &p_data->discover_cfm, sizeof(wiced_bt_avdt_discover_t));
                 break;
 
                 case AVDT_GETCAP_CFM_EVT:
-                memcpy(&p_msg->msg.getcap_cfm, &p_data->getcap_cfm, sizeof(wiced_bt_avdt_config_t));
+                wiced_bt_a2dp_source_utils_memcpy(&p_msg->msg.getcap_cfm, &p_data->getcap_cfm, sizeof(wiced_bt_avdt_config_t));
                 break;
 
                 case AVDT_OPEN_CFM_EVT:
-                memcpy(&p_msg->msg.open_cfm, &p_data->open_cfm, sizeof(wiced_bt_avdt_open_t));
+                wiced_bt_a2dp_source_utils_memcpy(&p_msg->msg.open_cfm, &p_data->open_cfm, sizeof(wiced_bt_avdt_open_t));
                 break;
 
                 case AVDT_CONNECT_IND_EVT:
-                memcpy(&p_msg->msg.connect_ind, &p_data->connect_ind, sizeof(wiced_bt_avdt_evt_hdr_t));
+                wiced_bt_a2dp_source_utils_memcpy(&p_msg->msg.connect_ind, &p_data->connect_ind, sizeof(wiced_bt_avdt_evt_hdr_t));
                 break;
 
                 case AVDT_SECURITY_IND_EVT:
                 p_msg->msg.security_ind.p_data = (uint8_t *) (p_msg + 1);
-                memcpy(p_msg->msg.security_ind.p_data,
+                wiced_bt_a2dp_source_utils_memcpy(p_msg->msg.security_ind.p_data,
                        p_data->security_ind.p_data, sec_len);
                 break;
 
@@ -178,7 +191,7 @@ static void wiced_bt_a2dp_source_proc_stream_evt(uint8_t handle,
                 p_msg->msg.security_cfm.p_data = (uint8_t *) (p_msg + 1);
                 if (p_data->hdr.err_code == 0)
                 {
-                    memcpy(p_msg->msg.security_cfm.p_data,
+                    wiced_bt_a2dp_source_utils_memcpy(p_msg->msg.security_cfm.p_data,
                            p_data->security_cfm.p_data, sec_len);
                 }
                 break;
@@ -856,7 +869,7 @@ void wiced_bt_a2dp_source_do_start(wiced_bt_a2dp_source_ccb_t *p_ccb,
                 if (wiced_bt_a2dp_source_cb.p_config_data->codec_capabilities->info[i].codec_id ==
                     p_data->start_req.codec_params.codec_id)
                 {
-                    memcpy(&wiced_bt_a2dp_source_cb.p_config_data->default_codec_config[i],
+                    wiced_bt_a2dp_source_utils_memcpy(&wiced_bt_a2dp_source_cb.p_config_data->default_codec_config[i],
                             &p_data->start_req.codec_params,
                            sizeof(wiced_bt_a2dp_codec_info_t));
                     break;
@@ -1277,7 +1290,7 @@ void wiced_bt_a2dp_source_sig_str_hdl_getcap_cfm(wiced_bt_a2dp_source_ccb_t *p_c
             p_ccb->p_scb->av_sep_info[i].caps_already_updated = WICED_TRUE;
 
             /* Save the codec information to the control block */
-            memcpy(&p_ccb->p_scb->av_sep_info[i].peer_caps, gatcap_cfm->p_cfg, sizeof(wiced_bt_avdt_cfg_t));
+            wiced_bt_a2dp_source_utils_memcpy(&p_ccb->p_scb->av_sep_info[i].peer_caps, gatcap_cfm->p_cfg, sizeof(wiced_bt_avdt_cfg_t));
             found = WICED_TRUE;
             break;
 
@@ -1692,7 +1705,7 @@ void wiced_bt_a2dp_source_sig_hdl_set_re_config (wiced_bt_a2dp_source_ccb_t *p_c
         /* Build the configuration used to open the AVDT/A2DP connection */
 
         /* Copy the configuration exposed on initialization */
-        memcpy( &av_cfg, &p_ccb->p_scb->cfg, sizeof(wiced_bt_avdt_cfg_t) );
+        wiced_bt_a2dp_source_utils_memcpy( &av_cfg, &p_ccb->p_scb->cfg, sizeof(wiced_bt_avdt_cfg_t) );
 
         /* Based on peer and our config reset AVDT_PSC_DELAY_RPT */
         if ( ( p_ccb->p_scb->avdt_version < AVDT_VERSION_1_3 ) || ( AVDT_VERSION < AVDT_VERSION_1_3 ) ||

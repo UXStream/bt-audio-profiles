@@ -156,10 +156,11 @@
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1ac68649adbb89e05808230c7ec7783109" kind="variable"><name>sco_idx</name></member>
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1a0e124e4cc617677bfde535dfc936ff61" kind="variable"><name>b_sco_opened</name></member>
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1a69cc81cb032a4f147e031af0f5fb0aee" kind="variable"><name>retry_with_sco_only</name></member>
+    <member refid="structwiced__bt__hfp__ag__session__cb__t_1a97587cc963943e6257851d19ecd5c968" kind="variable"><name>reconnect_pending</name></member>
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1a0ad09539659e3ef7b7c2fc31216f2f12" kind="variable"><name>clip_enabled</name></member>
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1aa35ff641aa72ea466626af005ced1c84" kind="variable"><name>cmer_enabled</name></member>
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1a18950225263650acedf0ddbb9b0c21a5" kind="variable"><name>cmee_enabled</name></member>
-    <member refid="structwiced__bt__hfp__ag__session__cb__t_1a35b3de52c51dd277969cd365ddb543cd" kind="variable"><name>codec_conn_state</name></member>
+    <member refid="structwiced__bt__hfp__ag__session__cb__t_1a903c6c9d754236fcf0772dcf97f41e19" kind="variable"><name>codec_conn_state</name></member>
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1a89c325632ab5f55c337416b49e951690" kind="variable"><name>indicator_bit_map</name></member>
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1a0f8fe5049849b7a9f8d79f43c5e819f0" kind="variable"><name>hf_indicator_hf_support</name></member>
     <member refid="structwiced__bt__hfp__ag__session__cb__t_1a8cbab76499139a952e28cb2f89459668" kind="variable"><name>hf_indicator_ag_status</name></member>

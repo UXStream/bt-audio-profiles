@@ -167,6 +167,7 @@ typedef struct
     wiced_bool_t b_sco_opened; /* set to TRUE when SCO connection is open */
 
     wiced_bool_t retry_with_sco_only; /* ind to try with SCO only if eSCO fails */
+    wiced_bool_t reconnect_pending;   /* ind to reconnect SCO */
 
     wiced_bool_t clip_enabled; /* set to TRUE if HF enables CLIP reporting */
     wiced_bool_t cmer_enabled; /* set to TRUE if HF enables CMER reporting */
@@ -177,7 +178,7 @@ typedef struct
 #define CODEC_CONN_STATE_BAC_REC        0x01
 #define CODEC_CONN_STATE_BCS_SENT       0x02
 #define CODEC_CONN_STATE_BCS_RES_RECVD  0x03
-    wiced_bool_t codec_conn_state; /* State for codec connection */
+    uint8_t codec_conn_state; /* State for codec connection */
     uint8_t indicator_bit_map; /* Indicator bit map */
 #if (BTM_HF_INDICATOR_INCLUDED==TRUE)
 #define HF_IND_ENHANCED_SAFETY      0x01u

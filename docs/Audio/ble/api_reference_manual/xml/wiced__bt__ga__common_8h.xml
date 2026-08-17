@@ -263,7 +263,7 @@
           <name>WICED_BT_GA_AICS_ERROR_VALUE_OUT_OF_RANGE</name>
           <initializer>= 0x83</initializer>
           <briefdescription>
-<para>Gain setting valus is out of range. </para>
+<para>Gain setting values is out of range. </para>
           </briefdescription>
           <detaileddescription>
           </detaileddescription>
