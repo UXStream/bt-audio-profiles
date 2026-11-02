@@ -301,7 +301,7 @@ wiced_result_t wiced_bt_a2dp_source_disconnect(uint16_t handle)
     p_buf->handle    = handle;
 
     wiced_bt_a2dp_source_hdl_event(event, (wiced_bt_avdt_evt_hdr_t *)&p_buf->hdr);
-
+    wiced_bt_free_buffer(p_buf);
     return WICED_SUCCESS;
 }
 
