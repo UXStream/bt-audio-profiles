@@ -339,6 +339,15 @@ void wiced_bt_a2dp_source_do_sdp(wiced_bt_a2dp_source_ccb_t *p_ccb,
                                                ATTR_ID_PROTOCOL_DESC_LIST,
                                                ATTR_ID_BT_PROFILE_DESC_LIST};
 
+    /* In the accepter role, SDP only reads the peer's AVDTP version, and wiced_bt_a2dp_source_sdp_failed assumes
+     * version 1.0 when it is unknown. Some headphones never answer the L2CAP connection request for this SDP query.
+     * The btstack then refuses every incoming L2CAP channel on every link, so the accepter skips SDP. */
+    if (p_scb->is_accepter)
+    {
+        wiced_bt_a2dp_source_sdp_failed(p_ccb, p_data);
+        return;
+    }
+
     /* Save peer bd_addr in sdp_bd_addr */
     wiced_bt_a2dp_source_utils_bdcpy(wiced_bt_a2dp_source_cb.sdp_bd_addr, p_ccb->peer_addr);
 
