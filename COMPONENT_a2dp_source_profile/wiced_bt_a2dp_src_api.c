@@ -322,28 +322,8 @@ wiced_result_t wiced_bt_a2dp_source_cancel_connect(wiced_bt_device_address_t bd_
         return WICED_BADARG;
     }
 
-    /* In the signaling opening state, API_DISCONNECT_EVT frees the SDP database without stopping the query, so the
-     * query is cancelled instead. Its failure callback then ends the setup with CONNECT_EVT. */
-    if(p_ccb->state == WICED_BT_A2DP_SOURCE_SIG_OPENING_SST)
-    {
-        if(p_ccb->p_scb->p_sdp_db == NULL || !wiced_bt_sdp_cancel_service_search(p_ccb->p_scb->p_sdp_db))
-        {
-            return WICED_ERROR;
-        }
-        return WICED_SUCCESS;
-    }
-
-    /* AVDT drops a signaling connection that still waits for the peer's answer without reporting
-     * AVDT_DISCONNECT_IND_EVT, so the setup is ended here the same way a reported disconnect ends it. */
-    if(p_ccb->state == WICED_BT_A2DP_SOURCE_SIG_OPEN_SST && p_ccb->avdt_connecting)
-    {
-        wiced_bt_avdt_disconnect_req(p_ccb->peer_addr, p_ccb->p_dt_cback);
-        wiced_bt_a2dp_source_ssm_execute(p_ccb, NULL, WICED_BT_A2DP_SOURCE_AVDT_DISCONNECT_EVT);
-        return WICED_SUCCESS;
-    }
-
     memset(&data, 0, sizeof(data));
-    wiced_bt_a2dp_source_ssm_execute(p_ccb, &data, WICED_BT_A2DP_SOURCE_API_DISCONNECT_EVT);
+    wiced_bt_a2dp_source_ssm_execute(p_ccb, &data, WICED_BT_A2DP_SOURCE_API_CANCEL_EVT);
     return WICED_SUCCESS;
 }
 

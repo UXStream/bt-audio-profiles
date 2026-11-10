@@ -397,7 +397,6 @@ static void wiced_bt_a2dp_source_sig_change(uint16_t avdt_event, wiced_bt_a2dp_s
             if (p_ccb)
             {
                 p_ccb->p_scb->is_accepter = WICED_TRUE;
-                p_ccb->avdt_connecting = WICED_FALSE;
                 p_ccb->avdt_handle = p_data->str_msg.handle;
                 wiced_bt_a2dp_source_ssm_execute(p_ccb, p_data,
                                         WICED_BT_A2DP_SOURCE_AVDT_CONNECT_EVT);
