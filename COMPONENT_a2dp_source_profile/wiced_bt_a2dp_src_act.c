@@ -749,6 +749,7 @@ void wiced_bt_a2dp_source_connect_req(wiced_bt_a2dp_source_ccb_t *p_ccb,
     p_scb->avdt_version = p_data->sdp_res.avdt_version;
     wiced_bt_a2dp_source_free_sdb(p_ccb, p_data);
 
+    p_ccb->avdt_connecting = WICED_TRUE;
     wiced_bt_avdt_connect_req(p_ccb->peer_addr, 0/*Not Used*/, p_ccb->p_dt_cback);
 }
 

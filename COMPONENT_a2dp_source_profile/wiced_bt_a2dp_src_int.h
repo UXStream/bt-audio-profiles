@@ -302,6 +302,7 @@ typedef struct
     wiced_bt_avdt_ctrl_cback_t      *p_dt_cback;     /* the callback function to receive events from AVDT control channel */
     wiced_bool_t                     is_str_active;  /* whether stream channel is active */
     wiced_bt_a2dp_source_scb_t        *p_scb;          /* pointer to the stream control block */
+    wiced_bool_t                     avdt_connecting; /* from wiced_bt_avdt_connect_req until AVDT_CONNECT_IND_EVT */
 } wiced_bt_a2dp_source_ccb_t;
 
 /* Type for A2DP source control block */
@@ -361,6 +362,7 @@ extern void wiced_bt_a2dp_source_conn_cback(uint8_t handle,
     wiced_bt_device_address_t bd_addr, uint8_t event, wiced_bt_avdt_ctrl_t *p_data);
 
 /* State machine related function */
+extern wiced_bt_a2dp_source_ccb_t *wiced_bt_a2dp_source_get_ccb_by_bd_addr(wiced_bt_device_address_t bd_addr);
 extern void wiced_bt_a2dp_source_ssm_execute(wiced_bt_a2dp_source_ccb_t *p_ccb,
     wiced_bt_a2dp_source_data_t *p_data, uint8_t event);
 extern wiced_result_t wiced_bt_a2dp_source_init_state_machine(void);
