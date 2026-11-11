@@ -141,6 +141,7 @@ static const wiced_bt_a2dp_source_event_map_t wiced_bt_a2dp_source_sst_closing[]
 /* IMPORTANT:THE EVENTS MUST BE LISTED IN ASCENDING ORDER OF wiced_bt_a2dp_source_state_evt_t enum*/
 static const wiced_bt_a2dp_source_event_map_t wiced_bt_a2dp_source_sst_sig_connecting[] =
 {
+    {WICED_BT_A2DP_SOURCE_API_DISCONNECT_EVT       , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_cancel_avdt_connect},
     {WICED_BT_A2DP_SOURCE_AVDT_CONNECT_EVT         , WICED_BT_A2DP_SOURCE_SIG_OPEN_SST   , wiced_bt_a2dp_source_sig_opened},
     {WICED_BT_A2DP_SOURCE_AVDT_DISCONNECT_EVT      , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_sig_closed_cleanup},
     {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_cancel_avdt_connect}
