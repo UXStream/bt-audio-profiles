@@ -36,7 +36,8 @@ static const wiced_bt_a2dp_source_event_map_t wiced_bt_a2dp_source_sst_init[] =
     {WICED_BT_A2DP_SOURCE_STR_CLOSE_IND_EVT         , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_hdl_str_close_ind},
     {WICED_BT_A2DP_SOURCE_STR_CLOSE_CFM_EVT         , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_hdl_str_close_cfm},
     {WICED_BT_A2DP_SOURCE_AVDT_CONNECT_EVT         , WICED_BT_A2DP_SOURCE_SIG_OPEN_SST   , wiced_bt_a2dp_source_do_sdp},
-    {WICED_BT_A2DP_SOURCE_AVDT_DISCONNECT_EVT      , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_sig_closed_cleanup}
+    {WICED_BT_A2DP_SOURCE_AVDT_DISCONNECT_EVT      , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_sig_closed_cleanup},
+    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_cancel_avdt_connect}
 };
 
 /* State table for signal opening state */
