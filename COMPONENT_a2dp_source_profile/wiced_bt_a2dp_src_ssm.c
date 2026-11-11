@@ -68,7 +68,7 @@ static const wiced_bt_a2dp_source_event_map_t wiced_bt_a2dp_source_sst_sig_open[
     {WICED_BT_A2DP_SOURCE_STR_DISCOVER_CFM_EVT    , WICED_BT_A2DP_SOURCE_SIG_OPEN_SST   , wiced_bt_a2dp_source_sig_str_hdl_discovery_cfm},
     {WICED_BT_A2DP_SOURCE_STR_GETCAP_CFM_EVT       ,WICED_BT_A2DP_SOURCE_SIG_OPEN_SST   , wiced_bt_a2dp_source_sig_str_hdl_getcap_cfm},
     {WICED_BT_A2DP_SOURCE_STR_CONFIG_IND_EVT       , WICED_BT_A2DP_SOURCE_INCOMING_SST   , wiced_bt_a2dp_source_sig_str_hdl_setconfig},
-    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_CLOSING_SST    , wiced_bt_a2dp_source_disconnect_req}
+    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_cancel_avdt_connect}
 };
 
 /* State table for incoming state */
@@ -82,7 +82,7 @@ static const wiced_bt_a2dp_source_event_map_t wiced_bt_a2dp_source_sst_incoming[
     {WICED_BT_A2DP_SOURCE_STR_CLOSE_IND_EVT        , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_str_open_fail},
     {WICED_BT_A2DP_SOURCE_STR_CLOSE_CFM_EVT        , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_str_open_fail},
     {WICED_BT_A2DP_SOURCE_AVDT_DISCONNECT_EVT      , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_sig_closed_cleanup},
-    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_CLOSING_SST    , wiced_bt_a2dp_source_disconnect_req}
+    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_cancel_avdt_connect}
 };
 
 /* State table for outgoing state */
@@ -97,7 +97,7 @@ static const wiced_bt_a2dp_source_event_map_t wiced_bt_a2dp_source_sst_outgoing[
     {WICED_BT_A2DP_SOURCE_STR_CLOSE_IND_EVT        , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_str_open_fail},
     {WICED_BT_A2DP_SOURCE_STR_CLOSE_CFM_EVT        , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_str_open_fail},
     {WICED_BT_A2DP_SOURCE_AVDT_DISCONNECT_EVT      , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_sig_closed_cleanup},
-    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_CLOSING_SST    , wiced_bt_a2dp_source_disconnect_req}
+    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_cancel_avdt_connect}
 };
 
 /* State table for open state */
@@ -119,7 +119,7 @@ static const wiced_bt_a2dp_source_event_map_t wiced_bt_a2dp_source_sst_open[] =
     {WICED_BT_A2DP_SOURCE_AVDT_DISCONNECT_EVT      , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_sig_closed_cleanup},
     {WICED_BT_A2DP_SOURCE_API_RECONFIG_CMD_EVT     , WICED_BT_A2DP_SOURCE_OPEN_SST       , wiced_bt_a2dp_source_sig_hdl_reconfig},
     {WICED_BT_A2DP_SOURCE_STR_RECONFIG_CFM_EVT     , WICED_BT_A2DP_SOURCE_OPEN_SST       , wiced_bt_a2dp_source_reconfig_cfm},
-    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_CLOSING_SST    , wiced_bt_a2dp_source_do_close}
+    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_cancel_avdt_connect}
 };
 
 /* State table for closing state */
@@ -133,7 +133,7 @@ static const wiced_bt_a2dp_source_event_map_t wiced_bt_a2dp_source_sst_closing[]
     {WICED_BT_A2DP_SOURCE_STR_CLOSE_CFM_EVT         , WICED_BT_A2DP_SOURCE_CLOSING_SST    , wiced_bt_a2dp_source_hdl_str_close_cfm},
     {WICED_BT_A2DP_SOURCE_AVDT_DISCONNECT_EVT      , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_sig_closed_cleanup},
     {WICED_BT_A2DP_SOURCE_STR_DISCOVER_CFM_EVT    , WICED_BT_A2DP_SOURCE_SIG_OPEN_SST   , wiced_bt_a2dp_source_sig_str_hdl_discovery_cfm},
-    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_CLOSING_SST    , wiced_bt_a2dp_source_disconnect_req}
+    {WICED_BT_A2DP_SOURCE_API_CANCEL_EVT           , WICED_BT_A2DP_SOURCE_INIT_SST       , wiced_bt_a2dp_source_cancel_avdt_connect}
 };
 
 /* State table for signaling channel connecting state */

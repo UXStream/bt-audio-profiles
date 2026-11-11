@@ -1811,6 +1811,9 @@ void wiced_bt_a2dp_source_sig_closed_cleanup(wiced_bt_a2dp_source_ccb_t *p_ccb,
 {
     WICED_BTA2DP_SRC_TRACE("%s\n", __FUNCTION__);
 
+    /* Stops a pending SET_CONFIG_API, which would otherwise run in the next setup that uses this ccb. */
+    wiced_deinit_timer(&a2dp_src_setconfig_timer);
+
     //wiced_bt_a2dp_source_stream_close(p_scb->avdt_handle);
 
     wiced_bt_a2dp_source_sig_closed(p_ccb, p_data);
@@ -1853,9 +1856,8 @@ void wiced_bt_a2dp_source_sdp_cancelled(wiced_bt_a2dp_source_ccb_t *p_ccb,
 
 /*******************************************************************************
 ** Function         wiced_bt_a2dp_source_cancel_avdt_connect
-** Description      Disconnects a signaling channel that still waits for the peer
-**                  and ends the setup here, because AVDT drops such a channel
-**                  without reporting AVDT_DISCONNECT_IND_EVT.
+** Description      Disconnects AVDTP and ends the setup or stream here, because AVDT
+**                  does not always report AVDT_DISCONNECT_IND_EVT.
 *******************************************************************************/
 void wiced_bt_a2dp_source_cancel_avdt_connect(wiced_bt_a2dp_source_ccb_t *p_ccb,
         wiced_bt_a2dp_source_data_t *p_data)
