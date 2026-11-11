@@ -1811,10 +1811,59 @@ void wiced_bt_a2dp_source_sig_closed_cleanup(wiced_bt_a2dp_source_ccb_t *p_ccb,
 {
     WICED_BTA2DP_SRC_TRACE("%s\n", __FUNCTION__);
 
+    /* Stops a pending SET_CONFIG_API, which would otherwise run in the next setup that uses this ccb. */
+    wiced_deinit_timer(&a2dp_src_setconfig_timer);
+
     //wiced_bt_a2dp_source_stream_close(p_scb->avdt_handle);
 
     wiced_bt_a2dp_source_sig_closed(p_ccb, p_data);
     wiced_bt_a2dp_source_cleanup(p_ccb, p_data);
     /* Deallocate ccb */
     wiced_bt_a2dp_source_dealloc_ccb(p_ccb);
+}
+
+/*******************************************************************************
+** Function         wiced_bt_a2dp_source_cancel_sdp
+** Description      Cancels the SDP query, which then reports SDP_DISC_FAIL_EVT.
+*******************************************************************************/
+void wiced_bt_a2dp_source_cancel_sdp(wiced_bt_a2dp_source_ccb_t *p_ccb,
+        wiced_bt_a2dp_source_data_t *p_data)
+{
+    wiced_bt_sdp_discovery_db_t *p_sdp_db = p_ccb->p_scb->p_sdp_db;
+
+    WICED_BTA2DP_SRC_TRACE("%s \n", __FUNCTION__);
+
+    /* If no query runs, the SDP layer reports nothing, so SDP_DISC_FAIL_EVT is sent here. */
+    if (p_sdp_db == NULL || !wiced_bt_sdp_cancel_service_search(p_sdp_db))
+    {
+        wiced_bt_a2dp_source_ssm_execute(p_ccb, p_data, WICED_BT_A2DP_SOURCE_SDP_DISC_FAIL_EVT);
+    }
+}
+
+/*******************************************************************************
+** Function         wiced_bt_a2dp_source_sdp_cancelled
+** Description      Ends the setup with a failed CONNECT_EVT once the cancelled SDP query
+**                  has ended, whatever the query found.
+*******************************************************************************/
+void wiced_bt_a2dp_source_sdp_cancelled(wiced_bt_a2dp_source_ccb_t *p_ccb,
+        wiced_bt_a2dp_source_data_t *p_data)
+{
+    WICED_BTA2DP_SRC_TRACE("%s \n", __FUNCTION__);
+
+    wiced_bt_a2dp_source_cleanup(p_ccb, p_data);
+    wiced_bt_a2dp_source_sig_open_fail(p_ccb, p_data);
+}
+
+/*******************************************************************************
+** Function         wiced_bt_a2dp_source_cancel_avdt_connect
+** Description      Disconnects AVDTP and ends the setup or stream here, because AVDT
+**                  does not always report AVDT_DISCONNECT_IND_EVT.
+*******************************************************************************/
+void wiced_bt_a2dp_source_cancel_avdt_connect(wiced_bt_a2dp_source_ccb_t *p_ccb,
+        wiced_bt_a2dp_source_data_t *p_data)
+{
+    WICED_BTA2DP_SRC_TRACE("%s \n", __FUNCTION__);
+
+    wiced_bt_avdt_disconnect_req(p_ccb->peer_addr, p_ccb->p_dt_cback);
+    wiced_bt_a2dp_source_sig_closed_cleanup(p_ccb, p_data);
 }

@@ -260,6 +260,16 @@ wiced_result_t wiced_bt_a2dp_source_connect( wiced_bt_device_address_t bd_addres
  */
 wiced_result_t wiced_bt_a2dp_source_disconnect( uint16_t handle );
 
+/**
+ * @brief Ends the setup or connection to a peer device in whatever state it is in.
+ * @details Unlike wiced_bt_a2dp_source_disconnect, this also ends a setup that has no handle yet. The connection is
+ * free when the call returns, and WICED_BT_A2DP_SOURCE_DISCONNECT_EVT is reported from inside the call. The exception
+ * is a setup whose SDP query still runs: it ends with WICED_BT_A2DP_SOURCE_CONNECT_EVT once the cancelled query ends.
+ * @param[in] bd_address    The Bluetooth device address of the peer device.
+ * @return wiced_result_t (WICED_BT_XXX)
+ */
+wiced_result_t wiced_bt_a2dp_source_cancel_connect( wiced_bt_device_address_t bd_address );
+
 
 /**
  * @brief The API to start streaming.

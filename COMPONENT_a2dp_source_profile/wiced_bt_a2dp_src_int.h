@@ -148,6 +148,7 @@ typedef enum
     WICED_BT_A2DP_SOURCE_API_RECONFIG_CMD_EVT,
     WICED_BT_A2DP_SOURCE_STR_RECONFIG_CFM_EVT,
     WICED_BT_A2DP_SOURCE_STR_CONFIG_IND_EVT,
+    WICED_BT_A2DP_SOURCE_API_CANCEL_EVT,
     WICED_BT_A2DP_SOURCE_LAST_EVENT                   /**< IMPORTANT: This should always be the last event in this enum */
 } wiced_bt_a2dp_source_state_evt_t;
 
@@ -160,7 +161,9 @@ typedef enum
     WICED_BT_A2DP_SOURCE_INCOMING_SST,
     WICED_BT_A2DP_SOURCE_OUTGOING_SST,
     WICED_BT_A2DP_SOURCE_OPEN_SST,
-    WICED_BT_A2DP_SOURCE_CLOSING_SST
+    WICED_BT_A2DP_SOURCE_CLOSING_SST,
+    WICED_BT_A2DP_SOURCE_SIG_CONNECTING_SST,  /* wiced_bt_avdt_connect_req waits for the peer */
+    WICED_BT_A2DP_SOURCE_SDP_CANCELLING_SST   /* the cancelled SDP query has not reported its end yet */
 } wiced_bt_a2dp_source_state_t;
 
 /*****************************************************************************
@@ -361,6 +364,7 @@ extern void wiced_bt_a2dp_source_conn_cback(uint8_t handle,
     wiced_bt_device_address_t bd_addr, uint8_t event, wiced_bt_avdt_ctrl_t *p_data);
 
 /* State machine related function */
+extern wiced_bt_a2dp_source_ccb_t *wiced_bt_a2dp_source_get_ccb_by_bd_addr(wiced_bt_device_address_t bd_addr);
 extern void wiced_bt_a2dp_source_ssm_execute(wiced_bt_a2dp_source_ccb_t *p_ccb,
     wiced_bt_a2dp_source_data_t *p_data, uint8_t event);
 extern wiced_result_t wiced_bt_a2dp_source_init_state_machine(void);
@@ -422,6 +426,12 @@ extern void wiced_bt_a2dp_source_sig_open_fail(wiced_bt_a2dp_source_ccb_t *p_ccb
 extern void wiced_bt_a2dp_source_sig_hdl_ap_close_disconnect_req(wiced_bt_a2dp_source_ccb_t *p_ccb,
     wiced_bt_a2dp_source_data_t *p_data);
 extern void wiced_bt_a2dp_source_sig_closed_cleanup(wiced_bt_a2dp_source_ccb_t *p_ccb,
+    wiced_bt_a2dp_source_data_t *p_data);
+extern void wiced_bt_a2dp_source_cancel_sdp(wiced_bt_a2dp_source_ccb_t *p_ccb,
+    wiced_bt_a2dp_source_data_t *p_data);
+extern void wiced_bt_a2dp_source_sdp_cancelled(wiced_bt_a2dp_source_ccb_t *p_ccb,
+    wiced_bt_a2dp_source_data_t *p_data);
+extern void wiced_bt_a2dp_source_cancel_avdt_connect(wiced_bt_a2dp_source_ccb_t *p_ccb,
     wiced_bt_a2dp_source_data_t *p_data);
 extern void wiced_bt_a2dp_source_stream_chg(wiced_bt_a2dp_source_scb_t *p_scb,
     wiced_bool_t started);

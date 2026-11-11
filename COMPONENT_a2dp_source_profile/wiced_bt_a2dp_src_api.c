@@ -305,6 +305,28 @@ wiced_result_t wiced_bt_a2dp_source_disconnect(uint16_t handle)
     return WICED_SUCCESS;
 }
 
+wiced_result_t wiced_bt_a2dp_source_cancel_connect(wiced_bt_device_address_t bd_address)
+{
+    wiced_bt_a2dp_source_ccb_t *p_ccb;
+    wiced_bt_a2dp_source_data_t data;
+
+    if(wiced_bt_a2dp_source_cb.is_init != WICED_TRUE)
+    {
+        WICED_BTA2DP_SRC_ERROR("%s: Not initialized \n", __FUNCTION__);
+        return WICED_NOTUP;
+    }
+
+    p_ccb = wiced_bt_a2dp_source_get_ccb_by_bd_addr(bd_address);
+    if(p_ccb == NULL)
+    {
+        return WICED_BADARG;
+    }
+
+    memset(&data, 0, sizeof(data));
+    wiced_bt_a2dp_source_ssm_execute(p_ccb, &data, WICED_BT_A2DP_SOURCE_API_CANCEL_EVT);
+    return WICED_SUCCESS;
+}
+
 wiced_result_t wiced_bt_a2dp_source_start(uint16_t handle, wiced_bt_a2dp_codec_info_t *codec_info)
 {
     wiced_bt_a2dp_source_api_start_t *p_buf = NULL;
