@@ -105,6 +105,13 @@ static void wiced_bt_a2dp_source_utils_memcpy(void *dest, const void *src, size_
     }
 }
 
+/* AVDT sends one AVDT_WRITE_CFM_EVT per media packet while streaming. Tracing the successful ones floods
+ * the log and hides the other A2DP traces, so only failed writes are traced. */
+static wiced_bool_t wiced_bt_a2dp_source_should_log_evt(uint8_t event, wiced_bt_avdt_ctrl_t *p_data)
+{
+    return event != AVDT_WRITE_CFM_EVT || p_data == NULL || p_data->hdr.err_code != 0;
+}
+
 /*******************************************************************************
 ** Function         wiced_bt_a2dp_source_proc_stream_evt
 ** Description      Utility function to compose stream events.
@@ -115,8 +122,12 @@ static void wiced_bt_a2dp_source_proc_stream_evt(uint8_t handle,
     wiced_bt_a2dp_source_str_msg_t *p_msg   = NULL;
     uint16_t                      sec_len = 0;
     wiced_bt_a2dp_source_global_evt_t source_event;
+    wiced_bool_t                  log_event = wiced_bt_a2dp_source_should_log_evt(event, p_data);
 
-    WICED_BTA2DP_SRC_TRACE ("[%s] event %d handle %d \n",__FUNCTION__, event, handle);
+    if (log_event)
+    {
+        WICED_BTA2DP_SRC_TRACE ("[%s] event %d handle %d \n",__FUNCTION__, event, handle);
+    }
 
     if (p_data)
     {
@@ -139,15 +150,21 @@ static void wiced_bt_a2dp_source_proc_stream_evt(uint8_t handle,
         if (bd_addr != NULL)
         {
             wiced_bt_a2dp_source_utils_bdcpy(p_msg->bd_addr, bd_addr);
-            WICED_BTA2DP_SRC_TRACE("bd_addr:%02x-%02x-%02x-%02x-%02x-%02x \n",
-                          bd_addr[0], bd_addr[1],
-                          bd_addr[2], bd_addr[3],
-                          bd_addr[4], bd_addr[5]);
+            if (log_event)
+            {
+                WICED_BTA2DP_SRC_TRACE("bd_addr:%02x-%02x-%02x-%02x-%02x-%02x \n",
+                              bd_addr[0], bd_addr[1],
+                              bd_addr[2], bd_addr[3],
+                              bd_addr[4], bd_addr[5]);
+            }
         }
         /* Copy config params to event message buffer */
         if (p_data != NULL)
         {
-            WICED_BTA2DP_SRC_TRACE ("[%s] error code %d \n",__FUNCTION__,p_data->hdr.err_code);
+            if (log_event)
+            {
+                WICED_BTA2DP_SRC_TRACE ("[%s] error code %d \n",__FUNCTION__,p_data->hdr.err_code);
+            }
 
             wiced_bt_a2dp_source_utils_memcpy(&p_msg->msg, p_data, sizeof (wiced_bt_avdt_ctrl_t));
 
@@ -248,7 +265,10 @@ void wiced_bt_a2dp_source_ctrl_cback(uint8_t handle, wiced_bt_device_address_t b
 {
     wiced_bt_avdt_delay_rpt_t     *delay_rpt_cmd;
     wiced_bt_a2dp_source_event_data_t evt_data;
-    WICED_BTA2DP_SRC_TRACE("%s: avdt_handle: %d event=0x%x \n", __FUNCTION__, handle, event);
+    if (wiced_bt_a2dp_source_should_log_evt(event, p_data))
+    {
+        WICED_BTA2DP_SRC_TRACE("%s: avdt_handle: %d event=0x%x \n", __FUNCTION__, handle, event);
+    }
     wiced_bt_a2dp_source_proc_stream_evt(handle, bd_addr, event, p_data);
 
     if (event == AVDT_WRITE_CFM_EVT)
